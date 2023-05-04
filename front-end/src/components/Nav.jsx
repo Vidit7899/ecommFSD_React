@@ -1,10 +1,38 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import "./Nav.css"
+import { useStateValue } from '../StateProvider';
+import axios from 'axios';
 
-
+const client = axios.create({
+  baseURL: "http://localhost:8080/shoppy/auth" 
+});
 
 function Nav() {
+
+  const[{user, basket}, dispatch]=useStateValue();
+  const navigate=useNavigate()
+  
+const [data,setData]=useState(null);
+useEffect(()=>{
+  setData(JSON.parse(window.localStorage.getItem("user")))
+},[user])
+console.log(data);
+
+async function signOut(){
+
+await client.post("/signOut");
+
+dispatch({type:"signOut"});
+
+window.localStorage.removeItem("user");
+
+setData(null)
+
+
+navigate("/")
+
+}
   return (
     <div className='Nav'>
 
@@ -16,8 +44,8 @@ function Nav() {
         />
         
         <div className="header__option">
-          <span className="header__optionLineOne">Hello Guest</span>
-          <span className="header__optionLineTwo">Sign In</span>
+          <span className="header__optionLineOne">Hello {!data?"Guest":data}</span>
+          <span className="header__optionLineTwo">{!data?<Link to={"/auth/signIn"}>Sign In</Link>:<button onClick={signOut}>Sign Out</button>}</span>
         </div>
 
         <div className="header__option">
@@ -25,9 +53,9 @@ function Nav() {
           </div>
 
           <div className="header__optionBasket">
-            <span>Cart</span>
+            <span><Link to={"/Cart"} className="header__optionLineTwo header__basketCount">Cart</Link></span>
             <span className="header__optionLineTwo header__basketCount">
-              0
+              {basket?.length}
             </span>
           </div>
       

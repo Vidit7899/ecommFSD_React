@@ -26,7 +26,7 @@ function Products() {
     }
     getProducts();
   },[catId])
-console.log(products);
+
   const list=products&&products.map((product)=>{
     return(
         

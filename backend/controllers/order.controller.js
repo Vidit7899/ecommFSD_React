@@ -80,6 +80,6 @@ export const getOrderDetails=async(req, res)=>{
 
     const products=await order.getProducts();
 
-    return res.status(200).send(products)
+    return res.status(200).send({products, order})
 
 }

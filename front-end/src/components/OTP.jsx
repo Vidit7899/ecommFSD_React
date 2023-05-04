@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import SignUp from './SignUp.jsx'
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -11,7 +11,10 @@ const client = axios.create({
 function OTP() {
 
   const [sent, setSent] = useState(false);
-  const [verified, setVerified]=useState(false)
+  const [verified, setVerified]=useState(false);
+  const [phNo, setPhNo]=useState(0)
+
+  const navigate=useNavigate()
 
 
 
@@ -32,7 +35,10 @@ function OTP() {
 
     const res = (response.status)
 
-    if(res===200) setVerified(true)
+    if(res===200) {
+      setPhNo(e.target.phoneNumber.value);
+      setVerified(true)
+    }
 
   }
 
@@ -40,7 +46,9 @@ function OTP() {
   return (
    
     <div>
-     {verified ? <SignUp />:null}
+     {verified ? navigate("/auth/signUp",{
+      state:phNo
+    }):null}
      {!verified?<form onSubmit={(event) => {
         event.preventDefault();
         sent ? verifyOTP(event) : sendOTP(event)

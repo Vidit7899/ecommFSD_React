@@ -4,28 +4,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import { reducer as formReducer } from 'redux-form';
-import { configureStore } from '@reduxjs/toolkit';
+import { StateProvider } from './StateProvider';
+import userReducer, { initialState } from './reducers/UserReducer';
 
 
-const rootReducer=combineReducers({
-  form:formReducer
-})
 
-const store=configureStore({
-  reducer:rootReducer
-})
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
- <BrowserRouter>
- <Provider store={store}>
-    <App />
-    </Provider>
-    </BrowserRouter>
+  <BrowserRouter>
+  <StateProvider initialState={initialState} reducer={userReducer}>
+  <App />
+  </StateProvider>
+  </BrowserRouter>
 
 
 );

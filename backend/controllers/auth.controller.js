@@ -16,7 +16,7 @@ export const signUp=async (req, res)=>{
     })
     const token=Jwt.sign({id:user.userId}, process.env.SECRET_KEY,{expiresIn:86400})
     localStorage.setItem("token", token)
-    res.status(200).send("User registered successfully")
+    res.status(200).send({user, token})
 }catch(error){
     console.log(error)
     res.status(500).send(error)
@@ -43,10 +43,11 @@ export const signIn=async (req, res)=>{
            return res.status(401).send({message:'Invalid Password, please try again or reset Password'})
         }
            
-            res.status(200).send({message:"SignIn successful!"})
+       
         const token=Jwt.sign({id:user.userId}, process.env.SECRET_KEY,{expiresIn:86400})
 
             localStorage.setItem("token", token)
+            res.status(200).send({user, token})
 
 }
 
